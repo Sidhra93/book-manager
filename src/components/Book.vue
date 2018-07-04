@@ -1,5 +1,6 @@
 <template>
   <div class="my-container">
+    <p v-if="!bookDescription">No Description</p>
     <p>{{ bookDescription }}</p>
   </div>
 </template>
@@ -21,10 +22,11 @@ export default {
   },
   mounted () {
     this.books.forEach(book => {
-      if (book['.key'] === this.$router.params.id) {
+      if (book['.key'] === this.$route.params.id) {
         this.bookDescription = book.description
       }
     })
+    // this.bookDescription = this.$route.params.id
   }
 }
 </script>

@@ -12,7 +12,7 @@
             <th @click="sortAuthor">Author</th>
           </tr>
           <tr v-for="(book, index) in books" :key="index">
-            <td><a :href="book.url">{{book.title}}</a></td>
+            <td><router-link :to="'/' + book['.key']">{{book.title}}</router-link></td>
             <td>{{book.author}}</td>
             <td>
               <span class="glyphicon glyphicon-edit" @click="editBook(book)"></span>
@@ -35,6 +35,10 @@
         <label>URL</label>
         <input type="text" class="form-control" v-model="url">
       </div>
+      <div class="form-group">
+        <label>Description</label>
+        <input type="text" class="form-control" v-model="description">
+      </div>
       <button class="btn btn-primary" @click="addBook">ADD BOOK</button>
       <button class="btn btn-primary" @click="addForm = false">CANCEL</button>
     </form>
@@ -54,6 +58,10 @@
       <div class="form-group">
         <label>URL</label>
         <input type="text" class="form-control" v-model="url">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <input type="text" class="form-control" v-model="description">
       </div>
       <button class="btn btn-primary" @click="submitEdit">EDIT BOOK</button>
       <button class="btn btn-primary" @click="cancel">CANCEL</button>
@@ -75,6 +83,7 @@ export default {
       title: '',
       author: '',
       url: '',
+      description: '',
       editForm: false,
       addForm: false,
       titleAscending: false,
@@ -89,11 +98,13 @@ export default {
       booksRef.push({
         title: this.title,
         author: this.author,
-        url: this.url
+        url: this.url,
+        description: this.description
       })
       this.title = ''
       this.author = ''
       this.url = ''
+      this.description = ''
     },
     removeBook (book) {
       booksRef.child(book['.key']).remove()
@@ -106,9 +117,10 @@ export default {
       this.title = book.title
       this.author = book.author
       this.url = book.url
+      this.description = book.description
     },
     submitEdit () {
-      db.ref('books/' + this.key).update({title: this.title, author: this.author, url: this.url})
+      db.ref('books/' + this.key).update({title: this.title, author: this.author, url: this.url, description: this.description})
       this.editForm = false
       this.title = ''
       this.author = ''
@@ -118,6 +130,7 @@ export default {
       this.title = ''
       this.author = ''
       this.url = ''
+      this.description = ''
       this.editForm = false
     },
     sortTitle () {
